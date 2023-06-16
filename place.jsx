@@ -1,8 +1,11 @@
-var inputFile = File("C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/testing/output.txt");
+var folder1 = "04";
+var folder2 = "2";
+
+var inputFile = File("C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/testing/" + folder1 + "/" + folder2 + "/output.txt");
+
+
 
 if (inputFile.open("r")) {
-    //alert("File opened successfully");
-
     var originalRulerUnits = app.preferences.rulerUnits;
     app.preferences.rulerUnits = Units.PIXELS;
 
@@ -10,7 +13,17 @@ if (inputFile.open("r")) {
     var docHeight = 100;
     var doc = app.documents.add(docWidth, docHeight, 72, 'output', NewDocumentMode.RGB, DocumentFill.TRANSPARENT);
 
-    var idx = 0;
+
+    var firstLine = inputFile.readln();
+    if (typeof firstLine === 'string') {
+        var imageDirectory = firstLine.replace(/^\s+|\s+$/g, '');
+        // The rest of your code
+    } else {
+        alert("First line is not a string.");
+    }
+
+
+    var idx = 1;
     while (!inputFile.eof) {
         var line = inputFile.readln();
         var parts = line.split(":");
@@ -26,7 +39,7 @@ if (inputFile.open("r")) {
 
             //alert("Transformed x=" + x + ", y=" + y + ", scale=" + scale);
 
-            var imageFile = new File("C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/set04/" + (idx < 10 ? '0' : '') + idx + ".png");
+            var imageFile = new File(imageDirectory + (idx < 10 ? '0' : '') + idx + ".png");
 
             if (imageFile.exists) {
                 var imageLayer = doc.artLayers.add();

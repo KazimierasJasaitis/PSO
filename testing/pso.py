@@ -107,13 +107,13 @@ class Particle:
         self.velocity = w * self.velocity + cognitive_velocity + social_velocity
 
 class PSO:
-    def __init__(self, population_size, dimensions, image_sizes, paper_size, bounds, iterations, w, c1, c2):
+    def __init__(self, population_size, dimensions, image_sizes, paper_size, bounds, desired_fitness, w, c1, c2):
         self.population_size = population_size
         self.dimensions = dimensions
         self.image_sizes = image_sizes
         self.paper_size = paper_size
         self.bounds = bounds
-        self.iterations = iterations
+        self.desired_fitness = desired_fitness
         self.w = w
         self.c1 = c1
         self.c2 = c2
@@ -122,9 +122,12 @@ class PSO:
         self.population = [Particle(dimensions, bounds) for _ in range(population_size)]
 
     def run(self):
-        iterations = 0
         print("Start of run method")  # Debug print
-        for _ in range(self.iterations):
+        iterations_without_improvement = 0
+        while self.gbest_fitness > self.desired_fitness:
+            if iterations_without_improvement == 500:
+                break
+            iterations_without_improvement += 1
             for particle in self.population:
                 fitness = particle.compute_fitness(self.image_sizes, self.paper_size, scaling_penalty_factor=10, overlap_penalty_factor=5)
                 if fitness < particle.pbest_fitness:
@@ -134,19 +137,14 @@ class PSO:
                 if fitness < self.gbest_fitness:
                     self.gbest_fitness = fitness
                     self.gbest_position = particle.position
+                    iterations_without_improvement = 0
 
-                if fitness < 0.0001:
-                    break
-            if fitness < 0.0001:
-                break 
             for particle in self.population:
                 particle.update_velocity(self.gbest_position, self.w, self.c1, self.c2)
                 particle.update_position()
-            iterations += 1
 
 
         print("End of run method")  # Debug print
-        print(iterations)
         return self.gbest_position  # This line returns the best position
 
 if __name__ == "__main__":
@@ -161,7 +159,7 @@ if __name__ == "__main__":
     N = len(image_sizes)
     dimensions = 3 * N
     bounds = (0, 100)  # replace with your actual bounds
-    pso = PSO(population_size=500, dimensions=dimensions, image_sizes=image_sizes, paper_size=paper_size, bounds=bounds, iterations=20000, w=w, c1=c1, c2=c2)
+    pso = PSO(population_size=500, dimensions=dimensions, image_sizes=image_sizes, paper_size=paper_size, bounds=bounds, desired_fitness=20000, w=w, c1=c1, c2=c2)
     best_position = pso.run()
     print(pso.gbest_fitness)
     # Reshape the best position to a 2D array
