@@ -41,12 +41,13 @@ def cut_image(image_path, output_folder, n_pieces):
             right = vertical_cuts[j]
             lower = horizontal_cuts[i]
             cropped_image = image.crop((left, upper, right, lower))
-            cropped_image.save(os.path.join(output_folder, f'piece_{piece_counter}.png'))
+            cropped_image.save(os.path.join(output_folder, f'0{piece_counter}.png'))
             piece_counter += 1
 
-# Example usage:
-image_path = 'C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/image.png'
-output_folder = 'C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/'
-n_pieces = 2  # Can be any integer between 2 and 8
+if __name__ == "__main__":
+    # Example usage:
+    image_path = 'C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/image.png'
+    output_folder = 'C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/'
+    n_pieces = 5  # Can be any integer between 2 and 8
 
-cut_image(image_path, output_folder, n_pieces)
+    cut_image(image_path, output_folder, n_pieces)

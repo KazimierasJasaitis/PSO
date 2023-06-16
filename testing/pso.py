@@ -107,11 +107,16 @@ class Particle:
         self.velocity = w * self.velocity + cognitive_velocity + social_velocity
 
 class PSO:
-    def __init__(self, population_size, dimensions, bounds, iterations):
+    def __init__(self, population_size, dimensions, image_sizes, paper_size, bounds, iterations, w, c1, c2):
         self.population_size = population_size
         self.dimensions = dimensions
+        self.image_sizes = image_sizes
+        self.paper_size = paper_size
         self.bounds = bounds
         self.iterations = iterations
+        self.w = w
+        self.c1 = c1
+        self.c2 = c2
         self.gbest_position = np.zeros(dimensions)
         self.gbest_fitness = float('inf')
         self.population = [Particle(dimensions, bounds) for _ in range(population_size)]
@@ -121,7 +126,7 @@ class PSO:
         print("Start of run method")  # Debug print
         for _ in range(self.iterations):
             for particle in self.population:
-                fitness = particle.compute_fitness(image_sizes, paper_size, scaling_penalty_factor=10, overlap_penalty_factor=5)
+                fitness = particle.compute_fitness(self.image_sizes, self.paper_size, scaling_penalty_factor=10, overlap_penalty_factor=5)
                 if fitness < particle.pbest_fitness:
                     particle.pbest_fitness = fitness
                     particle.pbest_position = particle.position
@@ -135,7 +140,7 @@ class PSO:
             if fitness < 0.0001:
                 break 
             for particle in self.population:
-                particle.update_velocity(self.gbest_position, w=0.7, c1=1, c2=2)
+                particle.update_velocity(self.gbest_position, self.w, self.c1, self.c2)
                 particle.update_position()
             iterations += 1
 
@@ -148,12 +153,15 @@ if __name__ == "__main__":
     folder_path = "C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/set04/"
     paper_width = 100
     paper_height = 100
+    paper_size = (paper_width, paper_height)
+    w = 0.7
+    c1 = 1
+    c2 = 2
     image_sizes = get_image_dimensions_from_folder(folder_path)
     N = len(image_sizes)
     dimensions = 3 * N
     bounds = (0, 100)  # replace with your actual bounds
-    paper_size = (paper_width, paper_height)
-    pso = PSO(population_size=500, dimensions=dimensions, bounds=bounds, iterations=20000)
+    pso = PSO(population_size=500, dimensions=dimensions, image_sizes=image_sizes, paper_size=paper_size, bounds=bounds, iterations=20000, w=w, c1=c1, c2=c2)
     best_position = pso.run()
     print(pso.gbest_fitness)
     # Reshape the best position to a 2D array

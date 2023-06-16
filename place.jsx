@@ -1,4 +1,4 @@
-var inputFile = File("C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/output.txt");
+var inputFile = File("C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/testing/output.txt");
 
 if (inputFile.open("r")) {
     //alert("File opened successfully");
@@ -26,7 +26,7 @@ if (inputFile.open("r")) {
 
             //alert("Transformed x=" + x + ", y=" + y + ", scale=" + scale);
 
-            var imageFile = new File("C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/" + (idx < 10 ? '0' : '') + idx + ".png");
+            var imageFile = new File("C:/Users/Lenovo/Desktop/Kursinis Darbas/Stock Cutting Problem using PSO algorithm/images/set04/" + (idx < 10 ? '0' : '') + idx + ".png");
 
             if (imageFile.exists) {
                 var imageLayer = doc.artLayers.add();
